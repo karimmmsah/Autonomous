@@ -1,6 +1,6 @@
 <launch>
   <!-- Arguments -->
-  <arg name="world_file" default="$(find robot)/worlds/two_lanes.world" />
+  <arg name="world_file" default="$(find robot)/worlds/Final2.world" />
   <arg name="use_sim_time" default="true" />
 
   <!-- Load TurtleBot3 URDF -->
@@ -13,4 +13,15 @@
   <!-- Spawn TurtleBot3 Burger in the world -->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param robot_description -x 0 -y -0.2 -z 0.1 -model turtlebot3_burger" output="screen" />
+
+  <!-- Start RViz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot3_bringup)/rviz/turtlebot3_model.rviz" output="screen" />
+
+  <!-- TF and Sensor Setup -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+    <param name="use_sim_time" value="$(arg use_sim_time)" />
+  </node>
+
+  <node name="lidar_to_tf" pkg="tf" type="static_transform_publisher" args="0 0 0.1 0 0 0 base_link base_scan 100" />
 </launch>
+
